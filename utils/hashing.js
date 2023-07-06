@@ -1,8 +1,8 @@
 const jwt = require("jsonwebtoken");
 const bcryptjs = require('bcryptjs');
 
-const jwtSecretKey = process.env.JWT_SECRET;
-const expiresIn = process.env.JWT_EXPIRATION;
+const jwtSecretKey = 'AbcdWQREYT567123BvNcMxz';
+const expiresIn = '24h';
 const saltKey = '$2a$10$RJhCpxAOzQtlWLekXY4zW.';
 
 exports.generateToken = async (jwtPayload) => {

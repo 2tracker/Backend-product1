@@ -30,5 +30,9 @@ Router.post(
   "/sendotp",
   Admin.SendOtp
 );
+Router.post(
+  "/login",
+  Admin.Login
+);
 
 module.exports = Router;

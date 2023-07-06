@@ -54,10 +54,6 @@ exports.Register = async (req, res) => {
     res.status(500).json({ error: "Registration failed" });
   }
 };
-exports.Login = async (req, res) => {
-  
-};
-
 exports.SendOtp = async (req, res) => {
   const { email, mobile_number } = req.body;
   const otpExpiryMinutes = 20;
@@ -99,9 +95,9 @@ exports.SendOtp = async (req, res) => {
             .status(500)
             .json({ error: "Failed to send OTP via email" });
         }
-        res.send("sendOTP")
+        res.send({ MSG: "sendOTP", otp: mailOptions });
       });
-    } else if (phone) {
+    } else if (mobile_number) {
       twilio.messages
         .create({
           body: `Your OTP: ${otp}`,
@@ -109,7 +105,7 @@ exports.SendOtp = async (req, res) => {
           to: mobile_number,
         })
         .then(() => {
-          res.send("sendOTP")
+          res.send({ MSG: "sendOTP", otp: twilio.messages });
         })
         .catch(() => {
           res.status(500).json({ error: "Failed to send OTP via SMS" });
@@ -127,3 +123,44 @@ exports.SendOtp = async (req, res) => {
     return OTP;
   }
 };
+
+exports.Login = async (req, res) => {
+  const { email, mobile_number, otp } = req.body;
+  if (!email && !mobile_number) {
+    return res
+      .status(400)
+      .json({ error: "Please provide either an email or a mobile number" });
+  } else {
+    if (email) {
+      console.log(email,'email')
+      const admin = await Admin.findOne({ email: email });
+      if (!admin) {
+        return res.status(404).json({ error: "Admin not found" });
+      } else {
+        console.log(admin?.otp ,'admin')
+        console.log(otp,'otp')
+        if (admin?.otp != otp) {
+          return res.status(404).json({ error: "otp not found" });
+        } else {
+          const payload = { AdminId: admin._id };
+          const token = await generateToken(payload);
+          res.json({ MSG:"LOgin SuccessFully DOne ",data:admin,Token:token });
+        }
+      }
+    } else if (mobile_number) {
+      const admin = await Admin.findOne({ mobile_number: mobile_number });
+      if (!admin) {
+        return res.status(404).json({ error: "Admin not found" });
+      } else {
+        if (admin.otp !== otp) {
+          return res.status(404).json({ error: "otp not found" });
+        } else {
+          const payload = { AdminId: admin._id };
+          const token = await generateToken(payload);
+          res.json({ MSG:"LOgin SuccessFully DOne ",data:admin,Token:token });
+        }
+      }
+    }
+  }
+};
+

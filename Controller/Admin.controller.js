@@ -1,15 +1,16 @@
 const Admin = require("../Model/Admin");
+const Tesseract = require('tesseract.js');
 const {
   generateToken,
   hashData,
   compareHashData,
 } = require("../utils/hashing");
+
 const twilio = require("twilio")(
   "ACae715cfb25d56d67e9e836b2bd08526e",
   "073352b76f3af208ea2fbca0d85d2d76"
 );
 const nodemailer = require("nodemailer");
-const jwt = require("jsonwebtoken");
 
 exports.Register = async (req, res) => {
   try {
@@ -54,6 +55,7 @@ exports.Register = async (req, res) => {
     res.status(500).json({ error: "Registration failed" });
   }
 };
+
 exports.SendOtp = async (req, res) => {
   const { email, mobile_number } = req.body;
   const otpExpiryMinutes = 20;
@@ -65,14 +67,27 @@ exports.SendOtp = async (req, res) => {
   const otp = generateOTP();
   const otpExpiration = new Date();
   otpExpiration.setMinutes(otpExpiration.getMinutes() + otpExpiryMinutes);
-  const otpData = {
-    otp,
-    otpExpiration,
-  };
-
   try {
-    await Admin.updateOne(otpData);
+    let admin;
 
+    if (email) {
+      admin = await Admin.findOne({ email: email });
+
+      if (!admin) {
+        return res.status(404).json({ error: "Admin not found" });
+      }
+    } else if (mobile_number) {
+      admin = await Admin.findOne({ mobile_number: mobile_number });
+
+      if (!admin) {
+        return res.status(404).json({ error: "Admin not found" });
+      }
+    }
+
+    admin.otp = otp;
+    admin.otpExpiration = otpExpiration;
+
+    await admin.save();
     if (email) {
       const transporter = nodemailer.createTransport({
         host: "smtp.ethereal.email",
@@ -132,19 +147,23 @@ exports.Login = async (req, res) => {
       .json({ error: "Please provide either an email or a mobile number" });
   } else {
     if (email) {
-      console.log(email,'email')
+      console.log(email, "email");
       const admin = await Admin.findOne({ email: email });
       if (!admin) {
         return res.status(404).json({ error: "Admin not found" });
       } else {
-        console.log(admin?.otp ,'admin')
-        console.log(otp,'otp')
+        console.log(admin?.otp, "admin");
+        console.log(otp, "otp");
         if (admin?.otp != otp) {
           return res.status(404).json({ error: "otp not found" });
         } else {
           const payload = { AdminId: admin._id };
           const token = await generateToken(payload);
-          res.json({ MSG:"LOgin SuccessFully DOne ",data:admin,Token:token });
+          res.json({
+            MSG: "LOgin SuccessFully DOne ",
+            data: admin,
+            Token: token,
+          });
         }
       }
     } else if (mobile_number) {
@@ -157,10 +176,61 @@ exports.Login = async (req, res) => {
         } else {
           const payload = { AdminId: admin._id };
           const token = await generateToken(payload);
-          res.json({ MSG:"LOgin SuccessFully DOne ",data:admin,Token:token });
+          res.json({
+            MSG: "LOgin SuccessFully DOne ",
+            data: admin,
+            Token: token,
+          });
         }
       }
     }
   }
 };
 
+exports.PancardTOJson = async (req, res) => {
+  try {
+    let id = req.params.id
+    const image = await Admin.findById(id);
+
+    if (!image) {
+      return res.status(404).json({ error: "Image not found" });
+    }
+
+    console.log(image.pan_card[0].path,'image.pan_card.path')
+    const {data} = await Tesseract.recognize(image?.pan_card[0]?.path);
+    const imageText = data.text;
+    const text = imageText.toString()
+    console.log(text,'textttttssss ')
+    const jsonFormat = {
+      imageText: imageText.toString(),
+    };
+    res.json({MSG:"Convert TO Json",Data:jsonFormat});
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+exports.AadharTOJson = async (req, res) => {
+  try {
+    let id = req.params.id
+    const image = await Admin.findById(id);
+
+    if (!image) {
+      return res.status(404).json({ error: "Image not found" });
+    }
+
+    console.log(image.aadhar_card[0].path,'image.pan_card.path')
+    const {data} = await Tesseract.recognize(image?.aadhar_card[0]?.path);
+    const imageText = data.text;
+    const text = imageText.toString()
+    console.log(text,'textttttssss ')
+    const jsonFormat = {
+      imageText: imageText.toString(),
+    };
+    res.json({MSG:"Convert TO Json",Data:jsonFormat});
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};

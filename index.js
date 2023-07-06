@@ -1,5 +1,5 @@
 const express = require('express');
-const Router = require('./Router/Admin.controller')
+const Router = require('./Router/Admin.router')
 const app = express();
 const db = require('./Database/Db')
 

@@ -8,6 +8,7 @@
     "multer": "^1.4.5-lts.1",
     "nodemailer": "^6.9.3",
     "nodemon": "^2.0.22",
+    "tesseract.js": "^4.1.1",
     "twilio": "^4.13.0"
   },
   "name": "backend-product1",

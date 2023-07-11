@@ -22,7 +22,6 @@ exports.Register = async (req, res) => {
       password,
       confirm_password,
     } = req.body;
-    console.log(password, "password");
     const existingUser = await Admin.findOne({ email });
     if (existingUser) {
       return res.status(400).json({ error: "Email already exists" });

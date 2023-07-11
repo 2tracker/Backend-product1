@@ -159,7 +159,7 @@ exports.Login = async (req, res) => {
           const payload = { AdminId: admin._id };
           const token = await generateToken(payload);
           res.json({
-            MSG: "LOgin SuccessFully DOne ",
+            MSG: "Login SuccessFully Done ",
             data: admin,
             Token: token,
           });
@@ -176,7 +176,7 @@ exports.Login = async (req, res) => {
           const payload = { AdminId: admin._id };
           const token = await generateToken(payload);
           res.json({
-            MSG: "LOgin SuccessFully DOne ",
+            MSG: "Login SuccessFully Done ",
             data: admin,
             Token: token,
           });

@@ -115,7 +115,7 @@ exports.SendOtp = async (req, res) => {
       });
     } else if (mobile_number) {
       const accountSid = "ACae715cfb25d56d67e9e836b2bd08526e";
-      const authToken = "7b2ccaff7d9162d3f0f8ce3ca218fbde";
+      const authToken = "dbbc4a3175bc8efa09dd5e66eb6b7628";
       const twilioClient = twilio(accountSid, authToken);
 
       twilioClient.messages
@@ -147,14 +147,6 @@ function generateOTP() {
   return OTP;
 }
 
-function generateOTP() {
-  const digits = "0123456789";
-  let OTP = "";
-  for (let i = 0; i < 4; i++) {
-    OTP += digits[Math.floor(Math.random() * 10)];
-  }
-  return OTP;
-}
 
 exports.Login = async (req, res) => {
   const { email, mobile_number, otp } = req.body;

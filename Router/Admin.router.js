@@ -1,6 +1,7 @@
 const express = require("express");
 const Admin = require("../Controller/Admin.controller");
 const multer = require("multer");
+const { guard } = require("../utils/middleware");
 const path = require('path')
 const Router = express.Router();
 
@@ -42,6 +43,23 @@ Router.get(
 Router.get(
   "/aadhar/:id",
   Admin.AadharTOJson
+);
+Router.get(
+  "/all",
+  Admin.getAdmin
+);
+Router.get(
+  "/:id",
+  Admin.getbyidAdmin
+);
+Router.delete(
+  "/delete/:id",
+  Admin.DeleteAdmin
+);
+Router.patch(
+  "/update",
+  upload.fields([{ name: "pan_card" }, { name: "aadhar_card" }]),
+  Admin.UpdateAdmin
 );
 
 module.exports = Router;

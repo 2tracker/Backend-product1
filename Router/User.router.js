@@ -1,7 +1,7 @@
 const express = require("express");
 const User = require("../Controller/User.controller");
 const multer = require("multer");
-const { guard } = require("../utils/middleware");
+const { Adminguard, Userguard } = require("../utils/middleware");
 const path = require("path");
 const Router = express.Router();
 
@@ -24,6 +24,7 @@ const upload = multer({
 
 Router.post(
   "/register",
+  Adminguard,
   upload.fields([{ name: "aadharCard" }, { name: "profilePhoto" }]),
   User.RegisterUser
 );
@@ -31,5 +32,13 @@ Router.post(
 Router.post("/sendotp", User.SendOtp);
 
 Router.post("/login", User.Login);
+Router.get("/all", User.getUser);
+Router.get("/:id", User.getbyidUser);
+Router.patch(
+  "/update",
+  upload.fields([{ name: "aadharCard" }, { name: "profilePhoto" }]),
+  User.UpdateUser
+);
+Router.delete("/delete/:id", User.DeleteUser);
 
 module.exports = Router;

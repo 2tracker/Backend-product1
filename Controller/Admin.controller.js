@@ -250,7 +250,7 @@ exports.getAdmin = async (req, res) => {
     if (admin) {
       return res.status(200).send({ message: "Query successful", admin });
     } else {
-      return res.status(404).send({ message: "Target User not found" });
+      return res.status(404).send({ message: "Target Admin not found" });
     }
   } catch (err) {
     console.log(err, "errr");

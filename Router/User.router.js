@@ -24,7 +24,6 @@ const upload = multer({
 
 Router.post(
   "/register",
-  Adminguard,
   upload.fields([{ name: "aadharCard" }, { name: "profilePhoto" }]),
   User.RegisterUser
 );
@@ -40,5 +39,6 @@ Router.patch(
   User.UpdateUser
 );
 Router.delete("/delete/:id", User.DeleteUser);
+Router.get("/all/date", User.getDOBDate);
 
 module.exports = Router;

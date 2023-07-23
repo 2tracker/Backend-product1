@@ -14,6 +14,7 @@ exports.RegisterUser = async (req, res) => {
       lastName,
       email,
       mobileNumber,
+      DOB,
       password,
       confirm_password,
       aadharCard,
@@ -49,6 +50,7 @@ exports.RegisterUser = async (req, res) => {
       lastName,
       email,
       mobileNumber,
+      DOB,
       password: Hashpassword,
       confirm_password: Hashpassword,
       aadharCard: aadhar_Card,
@@ -245,6 +247,7 @@ exports.UpdateUser = async (req, res) => {
       firstName,
       lastName,
       email,
+      DOB,
       mobileNumber,
       password,
       confirm_password,
@@ -280,6 +283,7 @@ exports.UpdateUser = async (req, res) => {
       lastName,
       email,
       mobileNumber,
+      DOB,
       aadharCard: aadharCard || aadhar_Card,
       profilePhoto: profilePhoto || profile_Photo,
       salary,
@@ -322,5 +326,18 @@ exports.DeleteUser = async (req, res) => {
   } catch (error) {
     console.error("Error during admin deletion:", error);
     res.status(500).json({ error: "User deletion failed" });
+  }
+};
+
+exports.getDOBDate = async (req, res) => {
+  try {
+    const user = await User.find({}).select('-_id firstName lastName DOB');
+    if (user) {
+      return res.status(200).send({ message: "Query successful", user });
+    } else {
+      return res.status(404).send({ message: "Target User not found" });
+    }
+  } catch (err) {
+    console.log(err, "errr");
   }
 };

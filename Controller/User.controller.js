@@ -1,4 +1,5 @@
 const User = require("../Model/User");
+const moment = require('moment');
 const {
   generateToken,
   hashData,
@@ -331,13 +332,24 @@ exports.DeleteUser = async (req, res) => {
 
 exports.getDOBDate = async (req, res) => {
   try {
-    const user = await User.find({}).select('-_id firstName lastName DOB');
-    if (user) {
-      return res.status(200).send({ message: "Query successful", user });
-    } else {
+    const users = await User.find({}).select('-_id firstName lastName DOB');
+    if (!users || users.length === 0) {
       return res.status(404).send({ message: "Target User not found" });
     }
+    const usersWithDay = users.map(user => {
+      const dob = moment(user.DOB);
+      const dayOfWeek = dob.format('dddd');
+      return { ...user.toObject(), dayOfWeek };
+    });
+
+    return res.status(200).send({ message: "Query successful", users: usersWithDay });
   } catch (err) {
     console.log(err, "errr");
+    return res.status(500).send({ message: "Internal Server Error" });
   }
 };
+
+
+
+
+

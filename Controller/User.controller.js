@@ -329,24 +329,31 @@ exports.DeleteUser = async (req, res) => {
   }
 };
 
+
 exports.getDOBDate = async (req, res) => {
   try {
     const users = await User.find({}).select('-_id firstName lastName DOB');
     if (!users || users.length === 0) {
       return res.status(404).send({ message: "Target User not found" });
     }
-    const usersWithDay = users.map(user => {
+    const today = moment(); 
+    const usersWithDaysToBday = users.map(user => {
       const dob = moment(user.DOB);
       const dayOfWeek = dob.format('dddd');
-      return { ...user.toObject(), dayOfWeek };
+      const nextBday = dob.clone().year(today.year());
+      if (nextBday.isBefore(today) || nextBday.isSame(today, 'day')) {
+        nextBday.add(1, 'year');
+      }
+      const daysToBday = nextBday.diff(today, 'days');
+      return { ...user.toObject(), dayOfWeek, daysToBday };
     });
-
-    return res.status(200).send({ message: "Query successful", users: usersWithDay });
+    return res.status(200).send({ message: "Query successful", users: usersWithDaysToBday });
   } catch (err) {
     console.log(err, "errr");
     return res.status(500).send({ message: "Internal Server Error" });
   }
 };
+
 
 
 

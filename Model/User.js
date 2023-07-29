@@ -14,6 +14,7 @@ const userSchema = new mongoose.Schema({
   totalTraineePeriods: { type: String, required: true },
   incrementMonths: { type: String, required: true },
   incrementSalary: { type: String, required: true },
+  role: { type: String, required: true },
   otp:{ type:Number},
   otpExpiration: {type: Date,},
 });

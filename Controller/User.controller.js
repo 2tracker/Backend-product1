@@ -21,6 +21,7 @@ exports.RegisterUser = async (req, res) => {
       aadharCard,
       profilePhoto,
       salary,
+      role,
       income,
       totalTraineePeriods,
       incrementMonths,
@@ -52,6 +53,7 @@ exports.RegisterUser = async (req, res) => {
       email,
       mobileNumber,
       DOB,
+      role,
       password: Hashpassword,
       confirm_password: Hashpassword,
       aadharCard: aadhar_Card,
@@ -250,6 +252,7 @@ exports.UpdateUser = async (req, res) => {
       DOB,
       mobileNumber,
       password,
+      role,
       confirm_password,
       salary,
       aadharCard,
@@ -284,6 +287,7 @@ exports.UpdateUser = async (req, res) => {
       email,
       mobileNumber,
       DOB,
+      role,
       aadharCard: aadharCard || aadhar_Card,
       profilePhoto: profilePhoto || profile_Photo,
       salary,
@@ -332,7 +336,7 @@ exports.DeleteUser = async (req, res) => {
 
 exports.getDOBDate = async (req, res) => {
   try {
-    const users = await User.find({}).select('-_id firstName lastName DOB');
+    const users = await User.find({}).select('-_id firstName lastName DOB role');
     if (!users || users.length === 0) {
       return res.status(404).send({ message: "Target User not found" });
     }
@@ -353,9 +357,3 @@ exports.getDOBDate = async (req, res) => {
     return res.status(500).send({ message: "Internal Server Error" });
   }
 };
-
-
-
-
-
-

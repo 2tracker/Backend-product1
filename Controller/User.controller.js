@@ -107,16 +107,15 @@ exports.SendOtp = async (req, res) => {
 
     if (email) {
       const transporter = nodemailer.createTransport({
-        host: "smtp.ethereal.email",
-        port: 587,
+        service: 'Gmail',
         auth: {
-          user: "jaida.bartoletti@ethereal.email",
-          pass: "gekTgXXJXPT9fUGdfw",
+          user: 'project.tracker111@gmail.com',
+          pass: 'ejcngtxtpgvtefwo',
         },
       });
 
       const mailOptions = {
-        from: "Treacker@gmail.com",
+        from: "project.tracker111@gmail.com",
         to: email,
         subject: "OTP Verification",
         text: `Your OTP: ${otp}`,

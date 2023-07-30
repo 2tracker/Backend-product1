@@ -479,11 +479,6 @@ exports.BdaySendMail = async (req, res) => {
                                                 </td>
                                             </tr>
                                             <tr>
-                                            <td align="center" class="esd-block-text es-p5b">
-                                                <p style="color: #999999;"><strong> </strong></p>
-                                            </td>
-                                            </tr>
-                                            <tr>
                                                 <td align="center" class="esd-block-text es-p10b es-m-txt-l">
                                                     <p>Everyone let's congratulate ${user.firstName} ${user.lastName} at ${formattedBirthday}</p>
                                                 </td>

@@ -480,12 +480,12 @@ exports.BdaySendMail = async (req, res) => {
                                             </tr>
                                             <tr>
                                             <td align="center" class="esd-block-text es-p5b">
-                                                <p style="color: #999999;"><strong>Everyone let's congratulate ${user.firstName} ${user.lastName} </strong></p>
+                                                <p style="color: #999999;"><strong> </strong></p>
                                             </td>
                                             </tr>
                                             <tr>
                                                 <td align="center" class="esd-block-text es-p10b es-m-txt-l">
-                                                    <p>Everyone, let’s congratulate ${user.firstName} ${user.lastName} on her bday. The birthday party will take place in our meeting room on ${formattedBirthday}</p>
+                                                    <p>Everyone let's congratulate ${user.firstName} ${user.lastName} at ${formattedBirthday}</p>
                                                 </td>
                                             </tr>
                                             <tr>

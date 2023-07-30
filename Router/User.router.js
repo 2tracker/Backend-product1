@@ -29,6 +29,7 @@ Router.post(
 );
 
 Router.post("/sendotp", User.SendOtp);
+Router.post("/wishes", User.BdaySendMail);
 
 Router.post("/login", User.Login);
 Router.get("/all", User.getUser);

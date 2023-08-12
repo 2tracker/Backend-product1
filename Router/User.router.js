@@ -41,5 +41,6 @@ Router.patch(
 );
 Router.delete("/delete/:id", User.DeleteUser);
 Router.get("/all/date", User.getDOBDate);
+Router.get("/getusers", User.getUsers);
 
 module.exports = Router;

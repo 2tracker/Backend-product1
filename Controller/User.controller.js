@@ -402,3 +402,19 @@ exports.BdaySendMail = async (req, res) => {
     res.status(500).json({ error: 'Failed to send birthday wishes.' });
   }
 };
+
+
+exports.getUsers = async (req, res) => {
+
+    const id = req.query.id;
+    const firstName = req.query.firstName;
+    try {
+    const user = id ? await User.findById(id)
+    : await User.findOne({firstName:firstName})
+    const {password,...other} = user.doc;
+    res.send(other)
+    
+  } catch (err) {
+    console.log(err, "errr");
+  }
+};

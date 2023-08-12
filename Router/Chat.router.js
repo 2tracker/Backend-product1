@@ -5,10 +5,10 @@ const { Adminguard, Userguard } = require("../utils/middleware");
 
 const Router = express.Router();
 
-Router.post("/conversation",Chat.ChatConversation);
-Router.get("/conversations/:userId",Chat.ChatConversationGetUser);
-Router.post("/message", Chat.MessageSend);
-Router.get("/message/:conversationId",Chat.ChatMessageGetUser);
-Router.delete("/users/:userId",Chat.FindUser);
+Router.post("/conversations",Chat.conversation);
+Router.get("/:userId",Chat.Getconversation);
+Router.post("/messages",Chat.Messages);
+Router.get("/messages/:conversationId",Chat.GetMessages);
+
 
 module.exports = Router;
